@@ -13,7 +13,7 @@ void main() async {
   // FIREBASE KEYS HERE:
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-      apiKey: "API_KEY_IS_HIDDEN_FOR_SECURITY",
+      apiKey: "API_KEY_IS_HIDDEN_FOR_SECURITY", // REPLACE WITH YOUR FIREBASE API KEY
   authDomain: "civiclens-ssh36.firebaseapp.com",
   projectId: "civiclens-ssh36",
   storageBucket: "civiclens-ssh36.firebasestorage.app",

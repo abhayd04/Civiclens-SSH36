@@ -1,46 +1,34 @@
-# CivicLens 🏙️
-**Empowering Citizens through AI-Driven E-Governance**
+# 🛡️ CivicLens: AI-Driven Urban Governance
 
-## 💡 The Vision
-**CivicLens** is a citizen-centric e-governance platform designed to bridge the gap between residents and municipal authorities. 
+**"Bridging the Gap between Citizen Complaints and Administrative Resolution."**
 
-Urban infrastructure maintenance often suffers from a "Trust Deficit." Citizens find reporting civic hazards (like severe potholes, broken streetlights, or illegal dumping) tedious due to bureaucratic friction. Meanwhile, municipal bodies struggle to triage reports effectively, verify if contractors actually completed repairs, and keep citizens updated. 
+CivicLens is a high-performance e-governance portal that uses **Gemini 2.5 Flash AI** and **Flutter** to automate city maintenance. Unlike traditional portals, CivicLens enforces accountability via an automated Service Level Agreement (SLA) loop.
 
-CivicLens turns a complex reporting process into a seamless, 10-second action using GenAI.
 
-## ✨ Core Features (In Development)
-
-* **📸 AI-Powered Hazard Detection:** Citizens simply point their camera at a civic issue. We utilize Google Gemini 2.5 Flash to instantly analyze the photo, identify the hazard type, and assess its severity (High/Medium/Low) to help authorities prioritize tickets.
-* **📍 Precision Geotagging:** Integrates mobile Location Services with OpenStreetMap to pinpoint the exact latitude and longitude of the reported hazard, removing ambiguity for maintenance crews.
-* **👍 Community Ticket Management:** To prevent duplicate reports and prioritize critical infrastructure failures, citizens can view nearby pending hazards on a live map and manually upvote them to increase their visibility to city officials.
-* **🔄 The "Trust Loop" Verification:** Once a municipal contractor claims a repair is finished, any citizen can re-scan the location. The AI compares the new photo against the original to scientifically verify the fix before the ticket is officially closed.
-
-## 🚀 Tech Stack
-* **Frontend:** Flutter (Dart)
-* **AI Engine:** Google Gemini 2.5 Flash
-* **Backend & Database:** Firebase (Authentication & Cloud Firestore)
-* **Mapping:** OpenStreetMap & `flutter_map`
-
-## 🛠️ Local Setup & Installation
-
-To run this project locally during the development phase:
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/abhayd04/Civiclens-SSH36.git](https://github.com/abhayd04/Civiclens-SSH36.git)
-    ```
-2.  **Install Dependencies:**
-    Navigate to the project directory and run:
-    ```bash
-    flutter pub get
-    ```
-3.  **Environment Variables:**
-    * Ensure you have a valid Firebase project configured.
-    * *Note: API keys for Google Generative AI are managed securely and must be injected into your local environment prior to building.*
-4.  **Run the App:**
-    ```bash
-    flutter run
-    ```
 
 ---
-*Developed during the 36-Hour Hackathon Phase
+
+## 🌟 The Vision
+Current municipal systems suffer from "The Black Hole Effect"—complaints go in, but status never comes out. CivicLens ensures every report is **Triaged by AI**, **Tracked by Geo-location**, and **Verified by Computer Vision**.
+
+## 🛠️ Tech Stack
+- **Frontend:** Flutter (Multi-platform)
+- **Database/Auth:** Firebase (Firestore & Auth)
+- **Intelligence:** Google Gemini 1.5 Flash API
+- **Maps:** Google Maps SDK (Spatial Clustering)
+
+## 🚦 Quick Start
+1. `git clone <your-repo-url>`
+2. `flutter pub get`
+3. `flutter run`
+
+---
+
+## 🚀 Key Innovation: The Accountability Loop
+1. **Reporting:** Citizen uploads a photo; Gemini AI identifies the hazard & severity.
+2. **Command Center:** Officials receive a prioritized "Live Feed" of issues.
+3. **SLA Breach (Feature in Dev):** If ignored, the system auto-escalates via Twitter/RTI.
+4. **AI-Verification:** Contractors upload "Fix" photos; AI compares them against the original to close the ticket.
+
+---
+*For a deep dive into our modular features, see [FEATURES.md](./FEATURES.md)*

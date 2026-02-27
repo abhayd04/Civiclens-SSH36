@@ -7,7 +7,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:typed_data';
 import 'dart:math' show cos, sqrt, asin;
-
+import 'leaderboard_screen.dart';
 import 'auth_service.dart'; 
 import 'map_screen.dart';
 import 'reports_screen.dart'; 
@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // GEMINI API KEY HERE
-  final String apiKey = "API_KEY_IS_HIDDEN_FOR_SECURITY"; 
+  final String apiKey = "API_KEY_IS_HIDDEN_FOR_SECURITY"; // REPLACE WITH YOUR GEMINI API KEY
 
   bool _isAnalyzing = false;
   Position? _currentPosition; 
@@ -129,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
           data['longitude']
         );
 
-        if (dist < 50) { 
+        // 🚨 THE FIX: Now it checks BOTH distance (< 50m) AND that the Department matches!
+        if (dist < 50 && data['dept'] == dept) { 
           existingDocId = doc.id;
           currentVotes = data['votes'] ?? 1;
           break;
@@ -144,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
         'votes': currentVotes + 1, 
         'last_updated': FieldValue.serverTimestamp(),
       });
-      if (mounted) _showSuccessDialog("Report Merged!", "Similar report found nearby. We escalated priority (+1 Vote).", severity, dispLoc);
+      // Updated the success message to show the specific department was merged
+      if (mounted) _showSuccessDialog("Report Merged!", "Similar $dept issue found nearby. Priority Escalated (+1 Vote).", severity, dispLoc);
     } else {
       await _addToFirestore(desc, severity, dept, dispLoc, 1);
       if (mounted) _showSuccessDialog("Hazard Reported", "New hazard reported successfully.", severity, dispLoc);
@@ -152,10 +154,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _addToFirestore(String desc, String sev, String dept, String loc, int votes) async {
+    // Generates a random ward between 1 and 5 for the demo
+    String assignedWard = "Ward ${(DateTime.now().second % 5) + 1}"; 
+
     await FirebaseFirestore.instance.collection('reports').add({
       'description': desc,
       'severity': sev,
       'dept': dept,
+      'ward': assignedWard, // 👈 NEW FIELD ADDED
       'location': loc,
       'latitude': _currentPosition?.latitude,
       'longitude': _currentPosition?.longitude,
@@ -358,30 +364,32 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          selectedItemColor: const Color(0xFF1A237E),
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
-          currentIndex: 1, 
-          type: BottomNavigationBarType.fixed,
-          onTap: (index) {
-            if (index == 0) Navigator.push(context, MaterialPageRoute(builder: (c) => const MapScreen()));
-            if (index == 1) _analyzeImage();
-            if (index == 2) Navigator.push(context, MaterialPageRoute(builder: (c) => const ReportsScreen()));
-          },
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.map_outlined), label: "Map"),
-            BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner, size: 32), label: "Scan Hazard"),
-            BottomNavigationBarItem(icon: Icon(Icons.history), label: "Reports"),
-          ],
-        ),
-      ),
+     decoration: BoxDecoration(
+       color: Colors.white,
+       boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+     ),
+     child: BottomNavigationBar(
+       backgroundColor: Colors.white,
+       elevation: 0,
+       selectedItemColor: const Color(0xFF1A237E),
+       unselectedItemColor: Colors.grey,
+       showUnselectedLabels: true,
+       currentIndex: 1, // 1 is the Scan Hazard screen
+       type: BottomNavigationBarType.fixed,
+       onTap: (index) {
+         if (index == 0) Navigator.push(context, MaterialPageRoute(builder: (c) => const MapScreen()));
+         if (index == 1) _analyzeImage(); // Currently on this screen
+         if (index == 2) Navigator.push(context, MaterialPageRoute(builder: (c) => const ReportsScreen()));
+         if (index == 3) Navigator.push(context, MaterialPageRoute(builder: (c) => const LeaderboardScreen())); // 👈 NEW ROUTE
+       },
+       items: const [
+         BottomNavigationBarItem(icon: Icon(Icons.map_outlined), label: "Map"),
+         BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner, size: 32), label: "Scan"),
+         BottomNavigationBarItem(icon: Icon(Icons.history), label: "Reports"),
+         BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: "Rankings"), // 👈 NEW BUTTON
+       ],
+     ),
+   ),
     );
   }
 }
